@@ -1,0 +1,53 @@
+<!-- <div style="display: flex;flex-direction: column;">
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label>Search</mat-label>
+      <input
+        type="text"
+        placeholder="Pick one"
+        aria-label="Number"
+        matInput
+        [formControl]="myControl"
+        [matAutocomplete]="auto"
+        style="width: 50%;"
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        @for (option of filteredOptions | async; track option) {
+        <mat-option [value]="option">{{ option }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+  {{options}}
+</div> -->
+
+<div style="display">
+  <div class="search-container">
+    <mat-form-field appearance="fill">
+      <input matInput [(ngModel)]="searchText" placeholder="Search group" (keyup.enter)="search()">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="search()">Search</button>
+  </div>
+  <app-search-results
+    *ngIf="showResults"
+    [results]="searchResults"
+    (selectItem)="selectItem($event)">
+  </app-search-results>
+</div>
+
+
+
+<mat-divider></mat-divider>
+
+<div class="search-container">
+  <mat-form-field appearance="fill">
+    <input matInput placeholder="Search Question" [(ngModel)]="searchQuestionText" (keyup.enter)="searchQuestion()">
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="searchQuestion()">Search</button>
+</div>
+<app-search-results
+  *ngIf="showQuestionResults"
+  [results]="searchQuestionResults"
+  (selectItemQuestion)="selectItemQuestion($event)">
+</app-search-results>
+

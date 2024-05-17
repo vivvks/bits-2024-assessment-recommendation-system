@@ -1,0 +1,46 @@
+// search.component.scss
+// .search-container {
+//     position: relative;
+  
+//     .search-input {
+//       width: 300px;
+//     }
+  
+//     .search-results {
+//       position: absolute;
+//       top: 100%;
+//       left: 0;
+//       z-index: 1000;
+//       background-color: #fff;
+//       border: 1px solid #ccc;
+//       padding: 10px;
+//       max-height: 200px;
+//       overflow-y: auto;
+//       width: 100%;
+//     }
+//   }
+
+  .search-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  justify-content: center;
+  margin-top: 32px;
+    button {
+      margin-left: 10px;
+    }
+  }
+  
+  .selected-item {
+    margin-top: 20px;
+  
+    mat-chip {
+      margin-right: 5px;
+    }
+  }
+ 
+  .mat-mdc-form-field {
+    // width: 300px; /* Adjust the width as needed */
+    width: 60%;
+  }
+  
