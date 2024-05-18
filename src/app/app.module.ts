@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,6 +17,8 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { MatTableModule } from '@angular/material/table'; // Import MatTableModule
 import { MatChipsModule } from '@angular/material/chips';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 const routes: Routes = [
   { path: 'header', component: HeaderComponent },
@@ -31,6 +34,7 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
     RouterModule.forRoot(routes),
     MatInputModule,
@@ -40,9 +44,12 @@ const routes: Routes = [
     FormsModule, // Add FormsModule here
     MatTableModule, // Add MatTableModule here
     MatChipsModule, // Add MatChipsModule here
-    MatDividerModule
+    MatDividerModule,
+    MatPaginator,
+    MatPaginatorModule,
+    MatToolbarModule
   ],
-  exports: [RouterModule],
+  exports: [CommonModule,RouterModule,MatTableModule,MatInputModule,MatToolbarModule],
   providers: [
     provideAnimationsAsync()
   ],

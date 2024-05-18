@@ -8,6 +8,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { DataService } from '../data.service';
+import { QuestionnaireService } from './questionnaire.service';
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -61,11 +63,27 @@ export class SearchComponent implements OnInit{
   selectedItem: any;
   selectedItemQuestion: any;
 
+    questionnaireData: any[];
+
+
+
 
   constructor(private dataService: DataService) { }
 
   ngOnInit(): void {
   }
+
+    loadQuestionnaireData() {
+      this.questionnaireService.getQuestionnaireData().subscribe(
+        (data) => {
+          this.questionnaireData = data;
+        },
+        (error) => {
+          console.error('Error fetching questionnaire data:', error);
+        }
+      );
+    }
+
 
   search() {
     this.showResults = true;
@@ -73,7 +91,7 @@ export class SearchComponent implements OnInit{
   }
 
   searchQuestion() {
-    this.showQuestionResults = true;    
+    this.showQuestionResults = true;
     this.searchQuestionResults = this.dataService.search(this.searchQuestionText);
   }
 

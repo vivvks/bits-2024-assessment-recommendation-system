@@ -21,33 +21,53 @@
   {{options}}
 </div> -->
 
-<div style="display">
-  <div class="search-container">
-    <mat-form-field appearance="fill">
-      <input matInput [(ngModel)]="searchText" placeholder="Search group" (keyup.enter)="search()">
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="search()">Search</button>
+<div style="display: flex !important ; justify-content: center">
+  <div style="width: 100%; display: flex !important;flex-direction: column;">
+    <div class="search-container" >
+      <mat-form-field appearance="fill">
+        <input
+          matInput
+          [(ngModel)]="searchText"
+          placeholder="Search group"
+          (keyup.enter)="search()"
+        />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="search()">
+        Search
+      </button>
+    </div>
+    <app-search-results
+    style="width: 95%;margin-left: 16px;"
+      *ngIf="showResults"
+      [results]="searchResults"
+      (selectItem)="selectItem($event)"
+    >
+    </app-search-results>
   </div>
-  <app-search-results
-    *ngIf="showResults"
-    [results]="searchResults"
-    (selectItem)="selectItem($event)">
-  </app-search-results>
+  <mat-divider [vertical]="true"></mat-divider>
+
+  <div style="width: 100%; display: flex !important;flex-direction: column;">
+    <div class="search-container" style="width: 100%">
+      <mat-form-field appearance="fill">
+        <input
+          matInput
+          placeholder="Search Question"
+          [(ngModel)]="searchQuestionText"
+          (keyup.enter)="searchQuestion()"
+        />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="searchQuestion()">
+        Search
+      </button>
+    </div>
+    <app-search-results
+    style="width: 95%;margin-left: 16px;"
+
+      *ngIf="showQuestionResults"
+      [results]="searchQuestionResults"
+      (selectItemQuestion)="selectItemQuestion($event)"
+    >
+    </app-search-results>
+  </div>
+
 </div>
-
-
-
-<mat-divider></mat-divider>
-
-<div class="search-container">
-  <mat-form-field appearance="fill">
-    <input matInput placeholder="Search Question" [(ngModel)]="searchQuestionText" (keyup.enter)="searchQuestion()">
-  </mat-form-field>
-  <button mat-raised-button color="primary" (click)="searchQuestion()">Search</button>
-</div>
-<app-search-results
-  *ngIf="showQuestionResults"
-  [results]="searchQuestionResults"
-  (selectItemQuestion)="selectItemQuestion($event)">
-</app-search-results>
-
