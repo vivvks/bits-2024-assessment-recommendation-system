@@ -11,10 +11,10 @@ export class SearchResultsComponent implements OnInit, AfterViewInit{
 
 
   @Input() results: any[] | undefined;
-  @Output() selectedItem: EventEmitter<any> = new EventEmitter<any>();
-  
+  @Output() selectedItem:any;
+
 //https://material.angular.io/components/table/overview
-  displayedColumns: string[] = ['id','name','category']; // Add more columns as needed
+  displayedColumns: string[] = ['id','question','option']; // Add more columns as needed
 
 
   dataSource: MatTableDataSource<any> | any ;
@@ -32,10 +32,9 @@ export class SearchResultsComponent implements OnInit, AfterViewInit{
   }
   selectItem(item: any) {
     console.log("items",item);
-    
+
     this.selectedItem=item;
 
-    console.log(this.selectedItem.name);
-    
+
   }
 }

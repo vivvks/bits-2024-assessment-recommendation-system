@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HeaderComponent } from './header/header.component';
 import { SearchComponent } from './search/search.component';
-import { Routes,RouterModule  } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -16,10 +16,10 @@ import { SearchResultsComponent } from './search-results/search-results.componen
 import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { MatTableModule } from '@angular/material/table'; // Import MatTableModule
 import { MatChipsModule } from '@angular/material/chips';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatToolbarModule} from '@angular/material/toolbar';
-
+import { MatDividerModule } from '@angular/material/divider';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { HttpClientModule } from '@angular/common/http';
 const routes: Routes = [
   { path: 'header', component: HeaderComponent },
   { path: 'search', component: SearchComponent },
@@ -30,12 +30,13 @@ const routes: Routes = [
     AppComponent,
     HeaderComponent,
     SearchComponent,
-    SearchResultsComponent
+    SearchResultsComponent,
   ],
   imports: [
     BrowserModule,
     CommonModule,
     AppRoutingModule,
+    HttpClientModule,
     RouterModule.forRoot(routes),
     MatInputModule,
     MatAutocompleteModule,
@@ -47,12 +48,16 @@ const routes: Routes = [
     MatDividerModule,
     MatPaginator,
     MatPaginatorModule,
-    MatToolbarModule
+    MatToolbarModule,
   ],
-  exports: [CommonModule,RouterModule,MatTableModule,MatInputModule,MatToolbarModule],
-  providers: [
-    provideAnimationsAsync()
+  exports: [
+    CommonModule,
+    RouterModule,
+    MatTableModule,
+    MatInputModule,
+    MatToolbarModule,
   ],
-  bootstrap: [AppComponent]
+  providers: [provideAnimationsAsync()],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

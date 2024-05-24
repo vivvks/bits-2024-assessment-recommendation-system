@@ -1,56 +1,22 @@
 // search.component.ts
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
-import {AsyncPipe} from '@angular/common';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { AsyncPipe } from '@angular/common';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
 import { DataService } from '../data.service';
+import { QuestionnaireService } from '../service/questionnaire.service';
 //import { QuestionnaireService } from './questionnaire.service';
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+  styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit{
-  // myControl = new FormControl('');
-  // options: string[] = ['One', 'Two', 'Three'];
-  // filteredOptions: Observable<string[]> | undefined;
+export class SearchComponent implements OnInit {
 
-  // ngOnInit() {
-  //   this.filteredOptions = this.myControl.valueChanges.pipe(
-  //     startWith(''),
-  //     map(value => this._filter(value || '')),
-  //   );
-  // }
-
-  // private _filter(value: string): string[] {
-  //   const filterValue = value.toLowerCase();
-
-  //   return this.options.filter(option => option.toLowerCase().includes(filterValue));
-  // }
-
-  // searchText: string = '';
-  // searchResults: any[] = [];
-  // showResults: boolean = false;
-  // selectedItem: any;
-
-  // constructor(private dataService: DataService) { }
-
-  // ngOnInit(): void {
-  // }
-
-  // search() {
-  //   this.showResults = true;
-  //   this.searchResults = this.dataService.search(this.searchText);
-  // }
-
-  // selectItem(item: any) {
-  //   this.selectedItem = item;
-  // }
   searchText: string = '';
   searchQuestionText: string = '';
 
@@ -63,36 +29,50 @@ export class SearchComponent implements OnInit{
   selectedItem: any;
   selectedItemQuestion: any;
 
-    //questionnaireData: any[];
+  //questionnaireData: any[];
 
+  constructor(private dataService: QuestionnaireService) {}
 
-
-
-  constructor(private dataService: DataService) { }
-
-  ngOnInit(): void {
-  }
-
-//     loadQuestionnaireData() {
-//       this.questionnaireService.getQuestionnaireData().subscribe(
-//         (data) => {
-//           this.questionnaireData = data;
-//         },
-//         (error) => {
-//           console.error('Error fetching questionnaire data:', error);
-//         }
-//       );
-//     }
-
+  ngOnInit(): void {}
 
   search() {
     this.showResults = true;
-    this.searchResults = this.dataService.search(this.searchText);
+    // this.searchResults = this.dataService.search(this.searchText);
   }
 
   searchQuestion() {
-    this.showQuestionResults = true;
-    this.searchQuestionResults = this.dataService.search(this.searchQuestionText);
+    let question: any;
+    let options: any;
+    let count: number = 0;
+
+    this.dataService.getQuestionnaireData().subscribe({
+      next: (data) => {
+        let finalresult = data.filter((obj) =>
+          obj.questnr_dtl.question
+            .toLowerCase()
+            .includes(this.searchQuestionText.toLowerCase())
+        );
+
+        for (let ques in finalresult) {
+          this.searchQuestionResults.push({
+            id: ques + 1,
+            question: finalresult[ques].questnr_dtl.question,
+            option: finalresult[ques].questnr_dtl.options.toString(),
+          });
+          // console.log(finalresult[ques]);
+          count++;
+        }
+        if (count === finalresult.length) {
+          this.showQuestionResults = true;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        console.log('complete');
+      },
+    });
   }
 
   selectItem(item: any) {
@@ -102,3 +82,4 @@ export class SearchComponent implements OnInit{
     this.selectedItemQuestion = item;
   }
 }
+
