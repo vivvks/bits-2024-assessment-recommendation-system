@@ -44,7 +44,19 @@ app.use((req, res, next) => {
 
 // Route to fetch data from the questionnaire table
 app.get("/questionnaire", (req, res) => {
-  pool.query("SELECT * FROM asmt.questionnaire", (err, result) => {
+  pool.query("SELECT * FROM asmt.ques_dtl", (err, result) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.json(result.rows);
+    }
+  });
+});
+
+// Route to fetch data from the questionnaire table
+app.get("/question", (req, res) => {
+  pool.query("SELECT * FROM asmt.ques_dtl", (err, result) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
