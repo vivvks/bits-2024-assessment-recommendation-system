@@ -20,6 +20,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HttpClientModule } from '@angular/common/http';
+import {MatCardModule} from '@angular/material/card';
+
 const routes: Routes = [
   { path: 'header', component: HeaderComponent },
   { path: 'search', component: SearchComponent },
@@ -49,6 +51,7 @@ const routes: Routes = [
     MatPaginator,
     MatPaginatorModule,
     MatToolbarModule,
+    MatCardModule
   ],
   exports: [
     CommonModule,

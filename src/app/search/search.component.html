@@ -22,52 +22,74 @@
 </div> -->
 
 <div style="display: flex !important ; justify-content: center">
-<!--  <div style="width: 100%; display: flex !important;flex-direction: column;">-->
-<!--    <div class="search-container" >-->
-<!--      <mat-form-field appearance="fill">-->
-<!--        <input-->
-<!--          matInput-->
-<!--          [(ngModel)]="searchText"-->
-<!--          placeholder="Search group"-->
-<!--          (keyup.enter)="search()"-->
-<!--        />-->
-<!--      </mat-form-field>-->
-<!--      <button mat-raised-button color="primary" (click)="search()">-->
-<!--        Search-->
-<!--      </button>-->
-<!--    </div>-->
-<!--    <app-search-results-->
-<!--    style="width: 95%;margin-left: 16px;"-->
-<!--      *ngIf="showResults"-->
-<!--      [results]="searchResults"-->
-<!--      (selectItem)="selectItem($event)"-->
-<!--    >-->
-<!--    </app-search-results>-->
-<!--  </div>-->
-<!--  <mat-divider [vertical]="true"></mat-divider>-->
-
-  <div style="width: 100%; display: flex !important;flex-direction: column;">
+  <div style="width: 100%; display: flex !important; flex-direction: column">
     <div class="search-container" style="width: 100%">
-      <mat-form-field appearance="fill">
+      <!-- <mat-form-field appearance="fill">
         <input
           matInput
           placeholder="Search Assessment Question"
           [(ngModel)]="searchQuestionText"
           (keyup.enter)="searchQuestion()"
         />
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="searchQuestion()">
-        Add
-      </button>
+      </mat-form-field> -->
+
+      <form
+        class="example-form"
+        style="width: 100%; display: flex !important; justify-content: center"
+      >
+        <mat-form-field class="example-full-width">
+          <mat-label>Search Assessment Question</mat-label>
+          <input
+            type="text"
+            matInput
+            [formControl]="myControl"
+            [(ngModel)]="searchQuestionText"
+            [matAutocomplete]="auto"
+            (input)="searchQuestion()"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            [displayWith]="displayFn"
+            (optionSelected)="setData($event)"
+          >
+            <mat-option
+              *ngFor="let option of filteredOptions | async"
+              [value]="option"
+            >
+              {{ option.question }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="addToTable()"
+          style="height: fit-content; margin-top: 2%"
+        >
+          <mat-spinner [diameter]="15" *ngIf="apiCalling"></mat-spinner>
+          Add
+        </button>
+      </form>
     </div>
     <app-search-results
-    style="width: 95%;margin-left: 16px;"
-
-      *ngIf="showQuestionResults"
+      style="width: 95%; margin-left: 16px"
+      *ngIf="showQuestionResults && searchQuestionResults.length > 0"
       [results]="searchQuestionResults"
       (selectItemQuestion)="selectItemQuestion($event)"
+    ></app-search-results>
+  </div>
+  <div style="width: 100%; display: flex !important; flex-direction: column">
+    <mat-card *ngIf="showResults" appearance="outlined" style="width: 95%;align-items: center;margin-top: 28px;background-color: #fafafa;color: rgba(0, 0, 0, 0.6);font-size: 16px;margin-left: 12px;">
+      <mat-card-content>Recommended Questions</mat-card-content>
+    </mat-card>
+    <app-search-results
+      style="width: 95%; margin-left: 16px"
+      *ngIf="showResults"
+      [results]="recommendedQuestionResults"
+      (selectItem)="selectItem($event)"
     >
     </app-search-results>
   </div>
-
+  <mat-divider [vertical]="true"></mat-divider>
 </div>

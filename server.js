@@ -44,7 +44,23 @@ app.use((req, res, next) => {
 
 // Route to fetch data from the questionnaire table
 app.get("/questionnaire", (req, res) => {
-  pool.query("SELECT * FROM asmt.ques_dtl", (err, result) => {
+  const searchQuery = req.query.search || ""; // Get the search query from the request
+
+  const sqlQuery = `
+    SELECT DISTINCT question,id,category
+    FROM asmt.ques_dtl
+    WHERE category ILIKE $1
+    LIMIT 10;
+  `;
+
+  // const sqlQuery = `
+  //   SELECT *
+  //   FROM asmt.ques_dtl
+  //   WHERE category ILIKE $1
+  //   LIMIT 10
+  // `; // Adjust the WHERE clause based on the column you want to search
+
+  pool.query(sqlQuery, [`%${searchQuery}%`], (err, result) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
@@ -57,6 +73,33 @@ app.get("/questionnaire", (req, res) => {
 // Route to fetch data from the questionnaire table
 app.get("/question", (req, res) => {
   pool.query("SELECT * FROM asmt.ques_dtl", (err, result) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.json(result.rows);
+    }
+  });
+});
+
+
+app.get("/recommendedQuestions", (req, res) => {
+  let searchQuery = req.query.ids || ""; // Get the search query from the request
+
+  // Split the comma-separated IDs into an array
+  const idsArray = searchQuery.split(',').map(id => id.trim());
+
+  // Construct the SQL query with dynamic IDs
+  const sqlQuery = `
+    SELECT id, question, category
+    FROM asmt.ques_dtl
+    WHERE id IN (${idsArray.map((_, index) => `$${index + 1}`).join(', ')})
+  `;
+
+  // Example SQL query when using PostgreSQL and node-postgres (pg) library
+  // Adjust based on your database driver and setup
+
+  pool.query(sqlQuery, idsArray, (err, result) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });

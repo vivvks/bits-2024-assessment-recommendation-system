@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -7,17 +7,17 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './search-results.component.html',
   styleUrl: './search-results.component.scss'
 })
-export class SearchResultsComponent implements OnInit, AfterViewInit{
+export class SearchResultsComponent implements OnInit, AfterViewInit {
 
 
   @Input() results: any[] | undefined;
-  @Output() selectedItem:any;
+  @Output() selectedItem: any;
 
-//https://material.angular.io/components/table/overview
-  displayedColumns: string[] = ['id','question','option']; // Add more columns as needed
+  //https://material.angular.io/components/table/overview
+  displayedColumns: string[] = [ 'question', 'option']; // Add more columns as needed
 
 
-  dataSource: MatTableDataSource<any> | any ;
+  dataSource: MatTableDataSource<any> | any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
 
@@ -30,10 +30,18 @@ export class SearchResultsComponent implements OnInit, AfterViewInit{
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
-  selectItem(item: any) {
-    console.log("items",item);
+  // Inside SearchResultsComponent
+  ngOnChanges(changes: SimpleChanges): void {    
+    if (changes['results'] && !changes['results'].firstChange) {
+      this.dataSource = new MatTableDataSource<any>(changes['results'].currentValue);
+      this.dataSource.paginator = this.paginator;
+    }
+  }
 
-    this.selectedItem=item;
+  selectItem(item: any) {
+    console.log("items", item);
+
+    this.selectedItem = item;
 
 
   }

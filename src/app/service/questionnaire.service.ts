@@ -1,8 +1,8 @@
 // questionnaire.service.ts
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams ,HttpHeaders,HttpErrorResponse} from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,41 +13,36 @@ export class QuestionnaireService {
   constructor(private http: HttpClient) { }
 
   // Function to get questionnaire data from the backend
-  getQuestionnaireData(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/questionnaire`);
+  getQuestionnaireData(searchTerm: string): Observable<any[]> {
+    const params = new HttpParams().set('search', searchTerm);
+    return this.http.get<any[]>(`${this.apiUrl}/questionnaire`, { params });
   }
 
-//   getQuestionnaireDataById(): Observable<any[]> {
-//       return this.http.get<any[]>(`${this.apiUrl}/questionnaire`);
-//     }
+  getQuestionsByIds(ids:string): Observable<any[]> {
+  console.log("idstes",ids)
+    let newurl="http://127.0.0.1:5000/recommendItems/"
+    const url = `${newurl}${ids}?train=false`;
+    console.log(url)
+     const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        });
 
-//
-//     async function getQuestionById(id: number): Promise<string | null> {
-//       const query = 'SELECT question FROM asmt.ques_dtl WHERE id = $1';
-//       try {
-//         const res = await pool.query(query, [id]);
-//         if (res.rows.length > 0) {
-//           return res.rows[0].question;
-//         } else {
-//           return null;
-//         }
-//       } catch (err) {
-//         console.error('Error executing query', err.stack);
-//         throw err;
-//       }
-//     }
-//
-//     // Example usage
-//     (async () => {
-//       const questionId = 1; // Replace with the ID you want to query
-//       const question = await getQuestionById(questionId);
-//       if (question) {
-//         console.log(`Question with ID ${questionId}: ${question}`);
-//       } else {
-//         console.log(`No question found with ID ${questionId}`);
-//       }
-//
-//       // Close the database pool
-//       await pool.end();
-//     })();
+        return this.http.get<any[]>(url, { headers })
+
+
+//     const hardcodedResponse = [
+//       "30510", "30511", "30512", "30513", "30514", "30515",
+//       "30516", "30517", "30518", "30519", "30520", "30521",
+//       "30522", "30523", "30524"
+//     ];
+
+    // Return the hardcoded response
+    //return of(hardcodedResponse);
+  }
+
+  getRecommendedQuestions(ids:string): Observable<any[]> {
+    const params = new HttpParams().set('ids', ids);
+    return this.http.get<any[]>(`${this.apiUrl}/recommendedQuestions`, { params });
+  }
 }
